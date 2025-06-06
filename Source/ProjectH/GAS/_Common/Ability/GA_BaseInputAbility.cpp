@@ -13,12 +13,12 @@ bool UGA_BaseInputAbility::InitializeAbility(
 	
 	IsInitialized = true;
 
-	const int32 InputId = GetInputId() == EAbilityInputId::Undefined
+	const int32 NewInputId = GetInputId() == EAbilityInputId::Undefined
 										? INDEX_NONE
 										: static_cast<int32>(GetInputId());
 				
 	ASC->GiveAbility(FGameplayAbilitySpec(
-		this, GetAbilityLevel(), InputId, ASC));
+		this, GetAbilityLevel(), NewInputId, ASC));
 	
 	return IsInitialized;
 }
