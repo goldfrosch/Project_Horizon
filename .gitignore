@@ -74,3 +74,11 @@ Plugins/**/Intermediate/*
 Plugins/Developer/
 # Cache files for the editor to use
 DerivedDataCache/*
+
+Content/CPStreetBoy/*
+Content/Heavy_Lancer_Set/*
+Content/Loot_Anim_Set/*
+Content/Ravens_S2/*
+Content/SciFi_Beasts_Pack/*
+Content/SciFi_Boss_Pack/*
+Content/Spear_And_Shield_Animations/*
