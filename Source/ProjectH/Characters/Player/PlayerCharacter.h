@@ -12,6 +12,8 @@ struct FInputActionValue;
 
 class UInputAction;
 class UInputComponent;
+class UCameraComponent;
+class USpringArmComponent;
 class UInputMappingContext;
 
 UCLASS()
@@ -35,7 +37,16 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 
 private:
+#pragma region Actor Components
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USpringArmComponent> SpringArm;
 
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<UCameraComponent> CameraComponent;
+
+	void InitializeCamera_Internal();
+#pragma endregion
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Options|Input"
 		, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
