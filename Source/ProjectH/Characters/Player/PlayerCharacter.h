@@ -4,6 +4,7 @@
 #include "ProjectH/Characters/BaseCharacter.h"
 #include "PlayerCharacter.generated.h"
 
+class UPlayerCameraManageComponent;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputBindingNotified
 											, UEnhancedInputComponent*
 											, EnhancedInputComponent);
@@ -44,6 +45,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UCameraComponent> CameraComponent;
 
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<UPlayerCameraManageComponent> PlayerCameraManageComponent;
+
 	void InitializeCamera_Internal();
 #pragma endregion
 	
@@ -55,13 +59,6 @@ private:
 		, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UInputAction> MoveInputAction;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Options|Input"
-		, meta = (AllowPrivateAccess = true))
-	TObjectPtr<UInputAction> LookInputAction;
-
 	UFUNCTION()
 	void MoveTo(const FInputActionValue& Value);
-
-	UFUNCTION()
-	void Look(const FInputActionValue& Value);
 };

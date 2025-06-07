@@ -2,6 +2,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "Components/PlayerCameraManageComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -50,9 +51,6 @@ void APlayerCharacter::SetupPlayerInputComponent(
 	EnhancedInputComponent->BindAction(MoveInputAction
 									   , ETriggerEvent::Triggered, this
 									   , &ThisClass::MoveTo);
-	EnhancedInputComponent->BindAction(LookInputAction
-									   , ETriggerEvent::Triggered, this
-									   , &ThisClass::Look);
 	
 	OnInputBindingNotified.Broadcast(EnhancedInputComponent);
 }
@@ -77,14 +75,6 @@ void APlayerCharacter::MoveTo(const FInputActionValue& Value)
 	}
 }
 
-void APlayerCharacter::Look(const FInputActionValue& Value)
-{
-	const FVector2d LookToValue = Value.Get<FVector2d>();
-	
-	AddControllerYawInput(LookToValue.X);
-	AddControllerPitchInput(LookToValue.Y);
-}
-
 void APlayerCharacter::InitializeCamera_Internal()
 {
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
@@ -100,4 +90,6 @@ void APlayerCharacter::InitializeCamera_Internal()
 
 	CameraComponent->SetRelativeLocation({0, 0, 0});
 	CameraComponent->SetRelativeRotation({0, 0, -18});
+	
+	PlayerCameraManageComponent = CreateDefaultSubobject<UPlayerCameraManageComponent>("Player Camera Manage Component");
 }
