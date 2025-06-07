@@ -36,3 +36,31 @@ void APlayerCharacter::SetupPlayerInputComponent(
 	
 	OnInputBindingNotified.Broadcast(EnhancedInputComponent);
 }
+
+void APlayerCharacter::MoveTo(const FInputActionValue& Value)
+{
+	const FVector2d MovementVector = Value.Get<FVector2d>();
+
+	if (Controller != nullptr)
+	{
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).
+			GetUnitAxis(EAxis::X);
+
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(
+			EAxis::Y);
+
+		AddMovementInput(ForwardDirection, MovementVector.X);
+		AddMovementInput(RightDirection, MovementVector.Y);
+	}
+}
+
+void APlayerCharacter::Look(const FInputActionValue& Value)
+{
+	const FVector2d LookToValue = Value.Get<FVector2d>();
+	
+	AddControllerYawInput(LookToValue.X);
+	AddControllerPitchInput(LookToValue.Y);
+}

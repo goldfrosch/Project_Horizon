@@ -8,6 +8,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputBindingNotified
 											, UEnhancedInputComponent*
 											, EnhancedInputComponent);
 
+struct FInputActionValue;
+
 class UInputAction;
 class UInputComponent;
 class UInputMappingContext;
@@ -31,4 +33,24 @@ protected:
 	virtual void OnRep_PlayerState() override;
 	
 	virtual void PossessedBy(AController* NewController) override;
+
+private:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Input"
+		, meta = (AllowPrivateAccess = true))
+	TObjectPtr<UInputMappingContext> DefaultMappingContext;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Input"
+		, meta = (AllowPrivateAccess = true))
+	TObjectPtr<UInputAction> MoveInputAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Input"
+		, meta = (AllowPrivateAccess = true))
+	TObjectPtr<UInputAction> LookInputAction;
+
+	UFUNCTION()
+	void MoveTo(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void Look(const FInputActionValue& Value);
 };
