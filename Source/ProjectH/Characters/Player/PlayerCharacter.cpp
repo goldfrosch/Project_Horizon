@@ -8,6 +8,7 @@
 APlayerCharacter::APlayerCharacter()
 {
 	InitializeCamera_Internal();
+	InitializeCustomMesh_Internal();
 }
 
 void APlayerCharacter::BeginPlay()
@@ -92,4 +93,11 @@ void APlayerCharacter::InitializeCamera_Internal()
 	CameraComponent->SetRelativeRotation({0, 0, -18});
 	
 	PlayerCameraManageComponent = CreateDefaultSubobject<UPlayerCameraManageComponent>("Player Camera Manage Component");
+}
+
+void APlayerCharacter::InitializeCustomMesh_Internal()
+{
+	Custom_Hair = CreateDefaultSubobject<USkeletalMeshComponent>("Custom Hair");
+	Custom_Hair->SetupAttachment(GetMesh(), "HAIR");
+	Custom_Hair->SetLeaderPoseComponent(GetMesh());
 }

@@ -28,8 +28,6 @@ void UBaseCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	GroundSpeed_H = FVector::DotProduct(Player->GetVelocity(), Player->GetActorRightVector());
 	GroundSpeed_V = FVector::DotProduct(Player->GetVelocity(), Player->GetActorForwardVector());
 
-	UE_LOG(LogTemp, Display, TEXT("Horizion: %f, Vertical: %f"), GroundSpeed_H, GroundSpeed_V);
-
 	if (GroundSpeed_H != 0 || GroundSpeed_V != 0)
 	{
 		bShouldMove = MovementComponent->GetCurrentAcceleration() != FVector::ZeroVector;

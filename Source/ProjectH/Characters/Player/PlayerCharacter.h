@@ -38,7 +38,7 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 
 private:
-#pragma region Actor Components
+#pragma region Camera Actor Components
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<USpringArmComponent> SpringArm;
 
@@ -49,6 +49,31 @@ private:
 	TObjectPtr<UPlayerCameraManageComponent> PlayerCameraManageComponent;
 
 	void InitializeCamera_Internal();
+#pragma endregion
+
+#pragma region Skeletal Actor Components
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USkeletalMeshComponent> Custom_Hair;
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USkeletalMeshComponent> Custom_Beard;
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USkeletalMeshComponent> Custom_HandLeft;
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USkeletalMeshComponent> Custom_HandRight;
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USkeletalMeshComponent> Custom_LowerBody;
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USkeletalMeshComponent> Custom_UpperBody;
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USkeletalMeshComponent> Custom_Foot;
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USkeletalMeshComponent> Custom_Hood;
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USkeletalMeshComponent> Custom_Shoulder;
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USkeletalMeshComponent> Custom_ShoulderBack;
+	
+	void InitializeCustomMesh_Internal();
 #pragma endregion
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Options|Input"
