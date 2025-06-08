@@ -100,4 +100,40 @@ void APlayerCharacter::InitializeCustomMesh_Internal()
 	Custom_Hair = CreateDefaultSubobject<USkeletalMeshComponent>("Custom Hair");
 	Custom_Hair->SetupAttachment(GetMesh(), "HAIR");
 	Custom_Hair->SetLeaderPoseComponent(GetMesh());
+	
+	Custom_Beard = CreateDefaultSubobject<USkeletalMeshComponent>("Custom Beard");
+	Custom_Beard->SetupAttachment(GetMesh());
+	Custom_Beard->SetLeaderPoseComponent(GetMesh());
+	
+	Custom_HandLeft = CreateDefaultSubobject<USkeletalMeshComponent>("Custom Hand Left");
+	Custom_HandLeft->SetupAttachment(GetMesh());
+	Custom_HandLeft->SetLeaderPoseComponent(GetMesh());
+	
+	Custom_HandRight = CreateDefaultSubobject<USkeletalMeshComponent>("Custom Hand Right");
+	Custom_HandRight->SetupAttachment(GetMesh());
+	Custom_HandRight->SetLeaderPoseComponent(GetMesh());
+	
+	Custom_LowerBody = CreateDefaultSubobject<USkeletalMeshComponent>("Custom Lower Body");
+	Custom_LowerBody->SetupAttachment(GetMesh());
+	Custom_LowerBody->SetLeaderPoseComponent(GetMesh());
+	
+	Custom_UpperBody = CreateDefaultSubobject<USkeletalMeshComponent>("Custom Upper Body");
+	Custom_UpperBody->SetupAttachment(GetMesh());
+	Custom_UpperBody->SetLeaderPoseComponent(GetMesh());
+	
+	Custom_Foot = CreateDefaultSubobject<USkeletalMeshComponent>("Custom Foot");
+	Custom_Foot->SetupAttachment(GetMesh());
+	Custom_Foot->SetLeaderPoseComponent(GetMesh());
+	
+	Custom_Hood = CreateDefaultSubobject<USkeletalMeshComponent>("Custom Hood");
+	Custom_Hood->SetupAttachment(GetMesh());
+	Custom_Hood->SetLeaderPoseComponent(GetMesh());
+	
+	Custom_Shoulder = CreateDefaultSubobject<USkeletalMeshComponent>("Custom Shoulder");
+	Custom_Shoulder->SetupAttachment(GetMesh());
+	Custom_Shoulder->SetLeaderPoseComponent(GetMesh());
+	
+	Custom_ShoulderBack = CreateDefaultSubobject<USkeletalMeshComponent>("Custom Shoulder Back");
+	Custom_ShoulderBack->SetupAttachment(GetMesh());
+	Custom_ShoulderBack->SetLeaderPoseComponent(GetMesh());
 }
