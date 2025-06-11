@@ -4,6 +4,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/PlayerCameraManageComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "ProjectH/Game/PlayerState/BasePlayerState.h"
+#include "ProjectH/GAS/_Common/HorizonAbilitySystemComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -29,11 +31,30 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
+
+	InitializeAbilitySystem();
 }
 
 void APlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+
+	InitializeAbilitySystem();
+}
+
+void APlayerCharacter::InitializeAbilitySystem()
+{
+	ABasePlayerState* PS = Cast<ABasePlayerState>(GetPlayerState());
+	if (!PS)
+	{
+		return;
+	}
+
+	AbilitySystemComponent = Cast<UHorizonAbilitySystemComponent>(
+		PS->GetAbilitySystemComponent());
+	AbilitySystemComponent->InitAbilityActorInfo(PS, this);
+
+	Super::InitializeAbilitySystem();
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(

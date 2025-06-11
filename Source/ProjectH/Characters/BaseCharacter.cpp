@@ -22,6 +22,7 @@ UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 
 void ABaseCharacter::InitializeAbilitySystem()
 {
+	AbilitySystemComponent->Initialize(InitializeData);
 	AbilitySystemComponent->
 		GetGameplayAttributeValueChangeDelegate(
 			Attribute->GetMovementSpeedAttribute()).AddUObject(

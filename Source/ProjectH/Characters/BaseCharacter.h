@@ -27,9 +27,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Options|GAS")
 	TObjectPtr<UHorizonAbilitySystemComponent> AbilitySystemComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Options|GAS")
-	TObjectPtr<UHorizonAbilitySystemInitializeData> InitializeData;
-
 	UPROPERTY()
 	TObjectPtr<UATR_BaseAttribute> Attribute;
 
@@ -40,4 +37,9 @@ protected:
 	void OnHealthChanged(const FOnAttributeChangeData& Data);
 
 	void OnMovementSpeedChanged(const FOnAttributeChangeData& Data);
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Options|GAS"
+		, meta = (AllowPrivateAccess = true))
+	TObjectPtr<UHorizonAbilitySystemInitializeData> AbilitySystemInitializeData;
 };
