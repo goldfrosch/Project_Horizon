@@ -5,7 +5,10 @@
 #include "Components/PlayerCameraManageComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "ProjectH/Game/PlayerState/BasePlayerState.h"
+#include "ProjectH/GAS/Manager/AttributeManager.h"
+#include "ProjectH/GAS/Player/Attribute/ATR_PlayerAttribute.h"
 #include "ProjectH/GAS/_Common/HorizonAbilitySystemComponent.h"
+#include "ProjectH/Utils/Constants.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -53,6 +56,10 @@ void APlayerCharacter::InitializeAbilitySystem()
 	AbilitySystemComponent = Cast<UHorizonAbilitySystemComponent>(
 		PS->GetAbilitySystemComponent());
 	AbilitySystemComponent->InitAbilityActorInfo(PS, this);
+	Attribute = Cast<UATR_BaseAttribute>(PS->GetAttributeSet());
+	FAttributeManager::GetAttributeManager()->InitPlayerAttribute(
+		HorizonConstants::PlayerAttributeGunLance
+		, Cast<UATR_PlayerAttribute>(Attribute));
 
 	Super::InitializeAbilitySystem();
 }

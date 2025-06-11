@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/PlayerState.h"
+#include "ProjectH/Utils/MacroUtil.h"
 #include "BasePlayerState.generated.h"
 
 class UATR_PlayerAttribute;
@@ -18,6 +19,7 @@ public:
 	ABasePlayerState();
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	GETTER_EDITABLE(TObjectPtr<UATR_PlayerAttribute>, AttributeSet)
 
 protected:
 	virtual void BeginPlay() override;
