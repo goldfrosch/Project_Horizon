@@ -37,6 +37,8 @@ protected:
 	
 	virtual void PossessedBy(AController* NewController) override;
 
+	virtual void InitializeAbilitySystem() override;
+
 private:
 #pragma region Camera Actor Components
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
@@ -75,7 +77,8 @@ private:
 	
 	void InitializeCustomMesh_Internal();
 #pragma endregion
-	
+
+#pragma region Input
 	UPROPERTY(EditDefaultsOnly, Category = "Options|Input"
 		, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
@@ -86,4 +89,5 @@ private:
 
 	UFUNCTION()
 	void MoveTo(const FInputActionValue& Value);
+#pragma endregion
 };

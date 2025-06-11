@@ -24,19 +24,23 @@ void UATR_PlayerAttribute::PreAttributeChange(
 
 void UATR_PlayerAttribute::OnRepMana(const FGameplayAttributeData& OldMana)
 {
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UATR_PlayerAttribute, Mana, OldMana);
 }
 
 void UATR_PlayerAttribute::OnRepMaxMana(
 	const FGameplayAttributeData& OldMaxMana)
 {
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UATR_PlayerAttribute, MaxMana, OldMaxMana);
 }
 
 void UATR_PlayerAttribute::OnRepStamina(
 	const FGameplayAttributeData& OldStamina)
 {
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UATR_PlayerAttribute, Stamina, OldStamina);
 }
 
 void UATR_PlayerAttribute::OnRepMaxStamina(
 	const FGameplayAttributeData& OldMaxStamina)
 {
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UATR_PlayerAttribute, MaxStamina, OldMaxStamina);
 }
