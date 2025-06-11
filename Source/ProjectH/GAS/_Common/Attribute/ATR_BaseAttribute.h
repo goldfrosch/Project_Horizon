@@ -26,24 +26,25 @@ public:
 		, ReplicatedUsing = OnRepMaxHealth)
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UATR_BaseAttribute, MaxHealth)
-	
+
 	UPROPERTY(BlueprintReadOnly, Category="Attributes"
-		, ReplicatedUsing = OnRepMovementSpeed)
-	FGameplayAttributeData MovementSpeed;
-	ATTRIBUTE_ACCESSORS(UATR_BaseAttribute, MovementSpeed)
+		, ReplicatedUsing = OnRepMoveSpeed)
+	FGameplayAttributeData MoveSpeed;
+	ATTRIBUTE_ACCESSORS(UATR_BaseAttribute, MoveSpeed)
 
 protected:
 	virtual void GetLifetimeReplicatedProps(
 		TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
-	
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute
+									, float& NewValue) override;
+
 	UFUNCTION()
 	virtual void OnRepHealth(const FGameplayAttributeData& OldHealth);
-	
+
 	UFUNCTION()
 	virtual void OnRepMaxHealth(const FGameplayAttributeData& OldMaxHealth);
-	
+
 	UFUNCTION()
-	virtual void OnRepMovementSpeed(const FGameplayAttributeData& OldMovementSpeed);
+	virtual void OnRepMoveSpeed(const FGameplayAttributeData& OldMoveSpeed);
 };

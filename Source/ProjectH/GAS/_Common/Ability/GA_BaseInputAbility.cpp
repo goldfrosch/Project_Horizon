@@ -6,7 +6,8 @@
 #include "ProjectH/GAS/_Common/HorizonAbilitySystemComponent.h"
 
 UGA_BaseInputAbility::UGA_BaseInputAbility(
-	const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+	const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer)
 {
 	InputId = EAbilityInputId::Undefined;
 	IsPassive = false;
@@ -16,21 +17,16 @@ UGA_BaseInputAbility::UGA_BaseInputAbility(
 bool UGA_BaseInputAbility::InitializeAbility(
 	UHorizonAbilitySystemComponent* ASC)
 {
-	if (Super::InitializeAbility(ASC))
-	{
-		return true;
-	}
-	
 	IsInitialized = true;
 
 	const int32 NewInputId = GetInputId() == EAbilityInputId::Undefined
-										? INDEX_NONE
-										: static_cast<int32>(GetInputId());
-				
+								? INDEX_NONE
+								: static_cast<int32>(GetInputId());
+
 	ASC->GiveAbility(FGameplayAbilitySpec(
 		this, GetAbilityLevel(), NewInputId, ASC));
-	
-	return IsInitialized;
+
+	return Super::InitializeAbility(ASC);
 }
 
 void UGA_BaseInputAbility::OnAvatarSet(
@@ -68,31 +64,32 @@ void UGA_BaseInputAbility::SetupEnhancedInputBindings(
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<
 		UEnhancedInputComponent>(PawnController->InputComponent.Get()))
 	{
-		if (UGA_BaseInputAbility* AbilityInstance = Cast<
-			UGA_BaseInputAbility>(Spec.Ability))
+		if (UGA_BaseInputAbility* AbilityInstance = Cast<UGA_BaseInputAbility>(
+			Spec.Ability))
 		{
 			// Ability의 각각에 맞춘 Input Action이 존재하는 경우 트리거와 종료 시에 대한 설정을
 			// 바인딩 처리 해준다.
 			if (IsValid(AbilityInstance->ActivationInputAction))
 			{
 				EnhancedInputComponent->BindAction(
-					ActivationInputAction, ETriggerEvent::Triggered,
-					AbilityInstance
-					, &ThisClass::OnAbilityInputPressed, ActorInfo);
+					ActivationInputAction, ETriggerEvent::Triggered
+					, AbilityInstance, &ThisClass::OnAbilityInputPressed
+					, ActorInfo);
 
 				EnhancedInputComponent->BindAction(
-					ActivationInputAction, ETriggerEvent::Completed,
-					AbilityInstance
-					, &ThisClass::OnAbilityInputReleased, ActorInfo);
+					ActivationInputAction, ETriggerEvent::Completed
+					, AbilityInstance, &ThisClass::OnAbilityInputReleased
+					, ActorInfo);
 			}
 		}
 	}
 }
 
 void UGA_BaseInputAbility::EndAbility(const FGameplayAbilitySpecHandle Handle
-	, const FGameplayAbilityActorInfo* ActorInfo
-	, const FGameplayAbilityActivationInfo ActivationInfo
-	, bool bReplicateEndAbility, bool bWasCancelled)
+									, const FGameplayAbilityActorInfo* ActorInfo
+									, const FGameplayAbilityActivationInfo
+									ActivationInfo, bool bReplicateEndAbility
+									, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility
 					, bWasCancelled);
@@ -116,30 +113,30 @@ void UGA_BaseInputAbility::EndAbility(const FGameplayAbilitySpecHandle Handle
 void UGA_BaseInputAbility::OnAbilityInputPressed(
 	const FGameplayAbilityActorInfo* ActorInfo)
 {
-	const APlayerCharacter* Owner = Cast<
-		APlayerCharacter>(ActorInfo->AvatarActor);
+	const APlayerCharacter* Owner = Cast<APlayerCharacter>(
+		ActorInfo->AvatarActor);
 	if (!IsValid(Owner))
 	{
 		return;
 	}
-	
+
 	Owner->GetAbilitySystemComponent()->AbilityLocalInputPressed(
-			static_cast<uint8>(InputId));
+		static_cast<uint8>(InputId));
 }
 
 void UGA_BaseInputAbility::OnAbilityInputReleased(
 	const FGameplayAbilityActorInfo* ActorInfo)
 {
-	const APlayerCharacter* Owner = Cast<
-		APlayerCharacter>(ActorInfo->AvatarActor);
-	
+	const APlayerCharacter* Owner = Cast<APlayerCharacter>(
+		ActorInfo->AvatarActor);
+
 	if (!IsValid(Owner))
 	{
 		return;
 	}
-	
+
 	Owner->GetAbilitySystemComponent()->AbilityLocalInputReleased(
-			static_cast<uint8>(InputId));
+		static_cast<uint8>(InputId));
 }
 
 void UGA_BaseInputAbility::OnRemoveAbility(
@@ -161,6 +158,6 @@ void UGA_BaseInputAbility::OnRemoveAbility(
 			}
 		}
 	}
-	
+
 	Super::OnRemoveAbility(ActorInfo, Spec);
 }
