@@ -2,26 +2,26 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
-#include "GameFramework/Character.h"
-#include "ProjectH/GAS/_Common/Attribute/ATR_BaseAttribute.h"
-#include "BaseCharacter.generated.h"
+#include "ProjectH/Utils/MacroUtil.h"
 
-class UATR_BaseAttribute;
-struct FOnAttributeChangeData;
+#include "BasePawn.generated.h"
+
 class UHorizonAbilitySystemInitializeData;
 class UHorizonAbilitySystemComponent;
-class UInputComponent;
+class UATR_BaseAttribute;
+struct FOnAttributeChangeData;
 
 UCLASS()
-class PROJECTH_API ABaseCharacter
-	: public ACharacter, public IAbilitySystemInterface
+class PROJECTH_API ABasePawn : public APawn, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
 public:
-	ABaseCharacter();
+	ABasePawn();
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	GETTER_EDITABLE(TObjectPtr<USkeletalMeshComponent>, Mesh)
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Options|GAS")
@@ -34,10 +34,11 @@ protected:
 
 	void OnHealthChanged(const FOnAttributeChangeData& Data);
 
-	void OnMovementSpeedChanged(const FOnAttributeChangeData& Data);
-
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Options|GAS"
 		, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UHorizonAbilitySystemInitializeData> AbilitySystemInitializeData;
+
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USkeletalMeshComponent> Mesh;
 };

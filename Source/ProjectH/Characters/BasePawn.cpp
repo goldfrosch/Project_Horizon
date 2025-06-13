@@ -1,33 +1,28 @@
-﻿#include "BaseCharacter.h"
-
-#include "GameFramework/CharacterMovementComponent.h"
+﻿#include "BasePawn.h"
 #include "ProjectH/GAS/_Common/HorizonAbilitySystemComponent.h"
 #include "ProjectH/GAS/_Common/Attribute/ATR_BaseAttribute.h"
 #include "ProjectH/GAS/_Common/Tag/HorizonGameplayTag.h"
 
 
-ABaseCharacter::ABaseCharacter()
+ABasePawn::ABasePawn()
 {
+	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>("Mesh");
 }
 
-UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
+UAbilitySystemComponent* ABasePawn::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
 
-void ABaseCharacter::InitializeAbilitySystem()
+void ABasePawn::InitializeAbilitySystem()
 {
 	AbilitySystemComponent->Initialize(AbilitySystemInitializeData);
-	AbilitySystemComponent->
-		GetGameplayAttributeValueChangeDelegate(
-			Attribute->GetMoveSpeedAttribute()).AddUObject(
-			this, &ThisClass::OnMovementSpeedChanged);
 	AbilitySystemComponent->
 		GetGameplayAttributeValueChangeDelegate(Attribute->GetHealthAttribute())
 		.AddUObject(this, &ThisClass::OnHealthChanged);
 }
 
-void ABaseCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
+void ABasePawn::OnHealthChanged(const FOnAttributeChangeData& Data)
 {
 	const float NewHealth = Data.NewValue;
 
@@ -40,11 +35,4 @@ void ABaseCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
 
 		AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer);
 	}
-}
-
-void ABaseCharacter::OnMovementSpeedChanged(const FOnAttributeChangeData& Data)
-{
-	const float NewMovementSpeed = Data.NewValue;
-
-	GetCharacterMovement()->MaxWalkSpeed = NewMovementSpeed;
 }
