@@ -20,6 +20,24 @@ void UGA_PlayerSprint::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 
 	GetAbilitySystemComponentFromActorInfo()->ApplyGameplayEffectSpecToSelf(
 		*EffectSpec.Data.Get());
+
+	ExistTime = FDateTime::Now();
+}
+
+void UGA_PlayerSprint::InputReleased(const FGameplayAbilitySpecHandle Handle
+									, const FGameplayAbilityActorInfo* ActorInfo
+									, const FGameplayAbilityActivationInfo
+									ActivationInfo)
+{
+	Super::InputReleased(Handle, ActorInfo, ActivationInfo);
+
+	const float HoldTime = (FDateTime::Now() - ExistTime).GetTotalSeconds();
+	if (HoldTime > HoldExistTime)
+	{
+		EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
+	}
+
+	// 구르기 실행
 }
 
 void UGA_PlayerSprint::EndAbility(const FGameplayAbilitySpecHandle Handle
@@ -33,14 +51,4 @@ void UGA_PlayerSprint::EndAbility(const FGameplayAbilitySpecHandle Handle
 	GetAbilitySystemComponentFromActorInfo()->
 		RemoveActiveGameplayEffectBySourceEffect(
 			SprintEffect, GetAbilitySystemComponentFromActorInfo());
-}
-
-void UGA_PlayerSprint::InputReleased(const FGameplayAbilitySpecHandle Handle
-									, const FGameplayAbilityActorInfo* ActorInfo
-									, const FGameplayAbilityActivationInfo
-									ActivationInfo)
-{
-	Super::InputReleased(Handle, ActorInfo, ActivationInfo);
-
-	EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 }

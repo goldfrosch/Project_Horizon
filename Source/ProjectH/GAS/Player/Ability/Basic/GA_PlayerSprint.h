@@ -4,6 +4,8 @@
 #include "ProjectH/GAS/_Common/Ability/GA_BaseInputAbility.h"
 #include "GA_PlayerSprint.generated.h"
 
+enum class EDirection2D : uint8;
+
 UCLASS()
 class PROJECTH_API UGA_PlayerSprint : public UGA_BaseInputAbility
 {
@@ -32,4 +34,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Options"
 		, meta = (AllowPrivateAccess = true))
 	TSubclassOf<UGameplayEffect> SprintEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Options"
+		, meta = (AllowPrivateAccess = true))
+	float HoldExistTime;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Animation"
+		, meta = (AllowPrivateAccess = true))
+	TMap<EDirection2D, TObjectPtr<UAnimMontage>> RollAnims;
+
+	FDateTime ExistTime;
 };
