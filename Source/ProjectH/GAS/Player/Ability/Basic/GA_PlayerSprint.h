@@ -4,6 +4,8 @@
 #include "ProjectH/GAS/_Common/Ability/GA_BaseInputAbility.h"
 #include "GA_PlayerSprint.generated.h"
 
+class UAbilityTask_WaitDelay;
+class UAT_PlayMontageWithEvent;
 enum class EDirection2D : uint8;
 
 UCLASS()
@@ -31,6 +33,12 @@ protected:
 								ActivationInfo) override;
 
 private:
+	UPROPERTY()
+	TObjectPtr<UAT_PlayMontageWithEvent> AT_RollActionMontage;
+
+	UPROPERTY()
+	TObjectPtr<UAbilityTask_WaitDelay> AT_SprintDelay;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Options"
 		, meta = (AllowPrivateAccess = true))
 	TSubclassOf<UGameplayEffect> SprintEffect;
@@ -44,4 +52,10 @@ private:
 	TMap<EDirection2D, TObjectPtr<UAnimMontage>> RollAnims;
 
 	FDateTime ExistTime;
+
+	UFUNCTION()
+	void OnRollActionEnd(FGameplayTag EventTag, FGameplayEventData EventData);
+
+	UFUNCTION()
+	void OnSprintReady();
 };
