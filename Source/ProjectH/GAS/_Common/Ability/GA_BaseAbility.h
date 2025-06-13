@@ -14,9 +14,9 @@ class PROJECTH_API UGA_BaseAbility : public UGameplayAbility
 
 public:
 	GETTER(bool, IsInitialized)
-	
+
 	virtual bool InitializeAbility(UHorizonAbilitySystemComponent* ASC);
 
 protected:
-	bool IsInitialized;
+	bool IsInitialized = false;
 };
