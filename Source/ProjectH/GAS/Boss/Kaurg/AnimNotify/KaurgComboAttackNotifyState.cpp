@@ -27,20 +27,12 @@ void UKaurgComboAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp
 
 	if (IsLeftEnabled)
 	{
-		const FVector InitialLeftLocation = BossKaurgCombatComponent->
-											GetLeftHandAttackRegion()->
-											GetComponentLocation();
-
-		BossKaurgCombatComponent->SetPrevLeftHandPosition(InitialLeftLocation);
+		BossKaurgCombatComponent->CaptureLeftHandPosition();
 	}
 
 	if (IsRightEnabled)
 	{
-		const FVector InitialRightLocation = BossKaurgCombatComponent->
-											GetRightHandAttackRegion()->
-											GetComponentLocation();
-
-		BossKaurgCombatComponent->SetPrevLeftHandPosition(InitialRightLocation);
+		BossKaurgCombatComponent->CaptureRightHandPosition();
 	}
 }
 
@@ -70,17 +62,20 @@ void UKaurgComboAttackNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp
 										GetLeftHandAttackRegion()->
 										GetComponentLocation();
 
-		const FVector BezierMidPoint =
-			FMathUtil::GetBezierControlPointByVectors(
-				PrevLeftLocation, NextLeftLocation, 5);
+		const FVector MidForceVector = (BossKaurgCombatComponent->
+			GetPrevLeftHandForce() + BossKaurgCombatComponent->
+									GetLeftHandAttackRegion()->
+									GetForwardVector()) / 2;
 
-		UKismetSystemLibrary::DrawDebugSphere(MeshComp->GetOwner()->GetWorld()
-											, FMathUtil::GetBezierPoint(
-												PrevLeftLocation, BezierMidPoint
-												, NextLeftLocation, 0.5), 100
-											, 12, FLinearColor::Red, 2, 1);
+		const FVector BezierMidPoint = FMathUtil::GetMiddlePoint(
+			PrevLeftLocation
+			, NextLeftLocation) + MidForceVector * FVector::Dist(
+			PrevLeftLocation, NextLeftLocation) / LagDistance;
 
-		BossKaurgCombatComponent->SetPrevLeftHandPosition(NextLeftLocation);
+		DebugAttackPosition(MeshComp->GetOwner()->GetWorld(), PrevLeftLocation
+							, BezierMidPoint, NextLeftLocation);
+
+		BossKaurgCombatComponent->CaptureLeftHandPosition();
 	}
 
 	if (IsRightEnabled)
@@ -99,4 +94,39 @@ void UKaurgComboAttackNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp
 											EventReference)
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
+}
+
+void UKaurgComboAttackNotifyState::DebugAttackPosition(
+	const UWorld* World, const FVector& P0, const FVector& P1
+	, const FVector& P2)
+{
+	const float Distance = FVector::Dist(P0, P2);
+
+	// 보간 갯수
+	const uint16 InterpCount = FMath::CeilToInt(
+		FMath::Abs(Distance) / LagDistance);
+
+	UE_LOG(LogTemp, Display, TEXT("테스트 Value: %f, %d"), Distance, InterpCount);
+
+	if (InterpCount > 0)
+	{
+		for (int i = 0; i <= InterpCount; i++)
+		{
+			UKismetSystemLibrary::DrawDebugSphere(
+				World, FMathUtil::GetBezierPoint(
+					P0, P1, P2, i / static_cast<float>(InterpCount)), 2, 12
+				, FLinearColor::Yellow, 1, 1);
+		}
+	}
+
+	UKismetSystemLibrary::DrawDebugSphere(World, P2, 2, 12, FLinearColor::Red, 1
+										, 1);
+	UKismetSystemLibrary::DrawDebugLine(World, P0, P2, FLinearColor::Red, 1, 1);
+}
+
+FVector UKaurgComboAttackNotifyState::GetForwardVectorByBox(
+	const UBoxComponent* Box)
+{
+	return Box->GetComponentLocation() + Box->GetScaledBoxExtent() * Box->
+		GetForwardVector();
 }

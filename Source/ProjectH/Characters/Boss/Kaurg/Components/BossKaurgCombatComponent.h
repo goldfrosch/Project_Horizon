@@ -19,24 +19,39 @@ public:
 	GETTER_EDITABLE(TObjectPtr<UBoxComponent>, RightHandAttackRegion)
 	SETTER(TObjectPtr<UBoxComponent>, RightHandAttackRegion)
 	GETTER_SETTER(FVector, PrevRightHandPosition)
+	GETTER_SETTER(FVector, PrevRightHandForce)
 
 	GETTER_EDITABLE(TObjectPtr<UBoxComponent>, LeftHandAttackRegion)
 	SETTER(TObjectPtr<UBoxComponent>, LeftHandAttackRegion)
 	GETTER_SETTER(FVector, PrevLeftHandPosition)
+	GETTER_SETTER(FVector, PrevLeftHandForce)
+
+	void CaptureRightHandPosition();
+	void CaptureLeftHandPosition();
 
 protected:
 	virtual void BeginPlay() override;
 
 private:
+#pragma region RightHand
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UBoxComponent> RightHandAttackRegion;
 
 	UPROPERTY()
-	FVector PrevRightHandPosition;
+	FVector PrevRightHandPosition = FVector::ZeroVector;
 
+	UPROPERTY()
+	FVector PrevRightHandForce = FVector::ZeroVector;
+#pragma endregion
+
+#pragma region LeftHand
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UBoxComponent> LeftHandAttackRegion;
 
 	UPROPERTY()
-	FVector PrevLeftHandPosition;
+	FVector PrevLeftHandPosition = FVector::ZeroVector;
+
+	UPROPERTY()
+	FVector PrevLeftHandForce = FVector::ZeroVector;
+#pragma endregion
 };
