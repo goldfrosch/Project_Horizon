@@ -5,6 +5,7 @@
 #include "ProjectH/Characters/Boss/Kaurg/BossKaurg.h"
 #include "ProjectH/Characters/Boss/Kaurg/Components/BossKaurgCombatComponent.h"
 #include "ProjectH/Utils/MathUtil.h"
+#include "ProjectH/Utils/TraceUtil.h"
 
 void UKaurgComboAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp
 												, UAnimSequenceBase* Animation
@@ -103,48 +104,36 @@ void UKaurgComboAttackNotifyState::DebugAttackPosition(
 	, const UBoxComponent* AttackBox)
 {
 	const float Distance = FVector::Dist(P0, P2);
-	const FVector& BoxRadius = AttackBox->GetScaledBoxExtent();
 	// 보간 갯수
 	const uint16 InterpCount = FMath::CeilToInt(
 		FMath::Abs(Distance) / LagDistance);
 
-	if (InterpCount > 0)
-	{
-		for (int i = 0; i <= InterpCount; i++)
-		{
-			const TArray<FVector> PointArray = {
-				{-1, -1, 0}, {-1, 1, 0}, {1, -1, 0}, {1, 1, 0}, {0, 0, 0}
-			};
-
-			for (const FVector& PinPointPercent : PointArray)
-			{
-				FVector PinPoint = AttackBox->GetUpVector();
-				PinPoint += AttackBox->GetForwardVector() * PinPointPercent.X *
-					BoxRadius.X;
-				PinPoint += FVector::CrossProduct(
-						AttackBox->GetForwardVector()
-						, AttackBox->GetUpVector()) * PinPointPercent.Y *
-					BoxRadius.
-					Y;
-
-				const FVector BezierPoint = FMathUtil::GetBezierPoint(
-					P0, P1, P2, i / static_cast<float>(InterpCount));
-
-				UKismetSystemLibrary::DrawDebugSphere(
-					World, BezierPoint + PinPoint, 2, 12, FLinearColor::Yellow
-					, 1, 1);
-			}
-		}
-	}
-
-	UKismetSystemLibrary::DrawDebugSphere(World, P2, 2, 12, FLinearColor::Red, 1
-										, 1);
 	UKismetSystemLibrary::DrawDebugLine(World, P0, P2, FLinearColor::Red, 1, 1);
-}
 
-FVector UKaurgComboAttackNotifyState::GetForwardVectorByBox(
-	const UBoxComponent* Box)
-{
-	return Box->GetComponentLocation() + Box->GetScaledBoxExtent() * Box->
-		GetForwardVector();
+	TArray<AActor*> IgnoreActors;
+	TArray<FHitResult> HitResults;
+
+	FSquareTraceParams TraceParams;
+	TraceParams.World = World;
+	TraceParams.IgnoreActors = IgnoreActors;
+	TraceParams.HitResults = HitResults;
+
+	TraceParams.IsShowDebugTrace = true;
+	TraceParams.SquareExtents = AttackBox->GetScaledBoxExtent();
+
+	for (int i = 0; i <= InterpCount; i++)
+	{
+		const float Percent = InterpCount == 0
+								? 1
+								: i / static_cast<float>(InterpCount);
+
+		const FVector BezierPoint = FMathUtil::GetBezierPoint(
+			P0, P1, P2, Percent);
+
+		TraceParams.SquareInfo.Position = BezierPoint;
+		TraceParams.SquareInfo.ForwardVector = AttackBox->GetForwardVector();
+		TraceParams.SquareInfo.UpVector = AttackBox->GetUpVector();
+
+		FTraceUtil::SquareTraceMulti(TraceParams);
+	}
 }
