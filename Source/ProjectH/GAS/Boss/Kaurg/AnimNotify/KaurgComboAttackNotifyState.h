@@ -40,7 +40,7 @@ private:
 
 	void DebugAttackPosition(const UWorld* World, const FVector& P0
 							, const FVector& P1, const FVector& P2
-							, const FVector& BoxRadius);
+							, const UBoxComponent* AttackBox);
 
 	// 이 거리보다 더 큰 경우 렉 처럼 판단해 위치 보간을 수행해준다.
 	float LagDistance = 20.f;
