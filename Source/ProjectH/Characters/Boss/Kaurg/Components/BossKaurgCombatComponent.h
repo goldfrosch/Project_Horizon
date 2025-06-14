@@ -26,6 +26,10 @@ public:
 	GETTER_SETTER(FVector, PrevLeftHandPosition)
 	GETTER_SETTER(FVector, PrevLeftHandForce)
 
+	// TODO: Trace 관련은 Ability로 이전하는 것을 고려하기
+	void TraceToAttackLeftHand();
+	void TraceToAttackRightHand();
+
 	void CaptureRightHandPosition();
 	void CaptureLeftHandPosition();
 
@@ -54,4 +58,17 @@ private:
 	UPROPERTY()
 	FVector PrevLeftHandForce = FVector::ZeroVector;
 #pragma endregion
+
+	float LagDistance = 40.f;
+
+	void TraceAttackPosition_Internal(const UWorld* World, const FVector& P0
+									, const FVector& P1, const FVector& P2
+									, const UBoxComponent* AttackBox);
+
+	void OnTraceAttackHit_Internal();
+
+	UPROPERTY()
+	TArray<AActor*> IgnoreActors;
+
+	TArray<FHitResult> HitResults;
 };
