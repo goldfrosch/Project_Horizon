@@ -4,7 +4,7 @@
 #include "ProjectH/Characters/Player/PlayerCharacter.h"
 #include "ProjectH/GAS/_Common/Attribute/ATR_BaseAttribute.h"
 #include "ProjectH/GAS/_Common/Task/AT_PlayMontageWithEvent.h"
-#include "ProjectH/Manager/LocateHelper.h"
+#include "ProjectH/Utils/LocateUtil.h"
 
 void UGA_PlayerSprint::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 										, const FGameplayAbilityActorInfo*
@@ -44,12 +44,12 @@ void UGA_PlayerSprint::InputReleased(const FGameplayAbilitySpecHandle Handle
 		return;
 	}
 
-	const float Angle = FLocateHelper::GetDeltaAngle(
+	const float Angle = FLocateUtil::GetDeltaAngle(
 		Player->GetVelocity(), Player->GetActorForwardVector());
 
 	// 구르기 실행
 	AT_RollActionMontage = UAT_PlayMontageWithEvent::InitialEvent(
-		this, NAME_None, RollAnims[FLocateHelper::GetDirectionByAngle(Angle)]
+		this, NAME_None, RollAnims[FLocateUtil::GetDirectionByAngle(Angle)]
 		, FGameplayTagContainer());
 
 	AT_RollActionMontage->OnCompleted.AddUniqueDynamic(

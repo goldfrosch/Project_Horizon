@@ -2,7 +2,7 @@
 
 enum class EDirection2D : uint8;
 
-class FLocateHelper
+class FLocateUtil
 {
 public:
 	static EDirection2D GetDirectionByAngle(const float Angle);

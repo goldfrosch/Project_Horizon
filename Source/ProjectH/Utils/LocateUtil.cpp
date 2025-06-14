@@ -1,7 +1,7 @@
-﻿#include "LocateHelper.h"
+﻿#include "LocateUtil.h"
 #include "ProjectH/GlobalEnum.h"
 
-EDirection2D FLocateHelper::GetDirectionByAngle(const float Angle)
+EDirection2D FLocateUtil::GetDirectionByAngle(const float Angle)
 {
 	if (Angle > -22.5f && Angle <= 22.5f)
 	{
@@ -38,7 +38,7 @@ EDirection2D FLocateHelper::GetDirectionByAngle(const float Angle)
 	return EDirection2D::B;
 }
 
-float FLocateHelper::GetDeltaAngle(const FVector& From, const FVector& To)
+float FLocateUtil::GetDeltaAngle(const FVector& From, const FVector& To)
 {
 	const FVector NormalizedFrom = From.GetSafeNormal();
 	const FVector NormalizedTo = To.GetSafeNormal();
