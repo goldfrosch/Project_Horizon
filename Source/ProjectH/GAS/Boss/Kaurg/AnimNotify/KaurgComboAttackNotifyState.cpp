@@ -73,7 +73,9 @@ void UKaurgComboAttackNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp
 			PrevLeftLocation, NextLeftLocation) / LagDistance;
 
 		DebugAttackPosition(MeshComp->GetOwner()->GetWorld(), PrevLeftLocation
-							, BezierMidPoint, NextLeftLocation);
+							, BezierMidPoint, NextLeftLocation
+							, BossKaurgCombatComponent->
+							GetLeftHandAttackRegion()->GetScaledBoxExtent());
 
 		BossKaurgCombatComponent->CaptureLeftHandPosition();
 	}
@@ -97,8 +99,8 @@ void UKaurgComboAttackNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp
 }
 
 void UKaurgComboAttackNotifyState::DebugAttackPosition(
-	const UWorld* World, const FVector& P0, const FVector& P1
-	, const FVector& P2)
+	const UWorld* World, const FVector& P0, const FVector& P1, const FVector& P2
+	, const FVector& BoxRadius)
 {
 	const float Distance = FVector::Dist(P0, P2);
 
@@ -106,16 +108,24 @@ void UKaurgComboAttackNotifyState::DebugAttackPosition(
 	const uint16 InterpCount = FMath::CeilToInt(
 		FMath::Abs(Distance) / LagDistance);
 
-	UE_LOG(LogTemp, Display, TEXT("테스트 Value: %f, %d"), Distance, InterpCount);
-
 	if (InterpCount > 0)
 	{
 		for (int i = 0; i <= InterpCount; i++)
 		{
-			UKismetSystemLibrary::DrawDebugSphere(
-				World, FMathUtil::GetBezierPoint(
-					P0, P1, P2, i / static_cast<float>(InterpCount)), 2, 12
-				, FLinearColor::Yellow, 1, 1);
+			const TArray<FVector> PointArray = {
+				{-1, -1, 0}, {-1, 1, 0}, {1, -1, 0}, {1, 1, 0}, {0, 0, 0}
+			};
+
+			for (const FVector& PinPointPercent : PointArray)
+			{
+				const FVector PinPoint = FMathUtil::GetBezierPoint(
+						P0, P1, P2
+						, i / static_cast<float>(InterpCount)) + BoxRadius *
+					PinPointPercent;
+
+				UKismetSystemLibrary::DrawDebugSphere(
+					World, PinPoint, 2, 12, FLinearColor::Yellow, 1, 1);
+			}
 		}
 	}
 
