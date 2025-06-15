@@ -5,8 +5,9 @@
 #include "ProjectH/Utils/MacroUtil.h"
 #include "BossKaurgCombatComponent.generated.h"
 
-
 class UBoxComponent;
+
+struct FSquareTraceParams;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class PROJECTH_API UBossKaurgCombatComponent : public UActorComponent
@@ -20,11 +21,13 @@ public:
 	SETTER(TObjectPtr<UBoxComponent>, RightHandAttackRegion)
 	GETTER_SETTER(FVector, PrevRightHandPosition)
 	GETTER_SETTER(FVector, PrevRightHandForce)
+	GETTER_SETTER(FVector, PrevRightHandUpVector)
 
 	GETTER_EDITABLE(TObjectPtr<UBoxComponent>, LeftHandAttackRegion)
 	SETTER(TObjectPtr<UBoxComponent>, LeftHandAttackRegion)
 	GETTER_SETTER(FVector, PrevLeftHandPosition)
 	GETTER_SETTER(FVector, PrevLeftHandForce)
+	GETTER_SETTER(FVector, PrevLeftHandUpVector)
 
 	// TODO: Trace 관련은 Ability로 이전하는 것을 고려하기
 	void TraceToAttackLeftHand();
@@ -46,6 +49,9 @@ private:
 
 	UPROPERTY()
 	FVector PrevRightHandForce = FVector::ZeroVector;
+
+	UPROPERTY()
+	FVector PrevRightHandUpVector = FVector::ZeroVector;
 #pragma endregion
 
 #pragma region LeftHand
@@ -57,13 +63,16 @@ private:
 
 	UPROPERTY()
 	FVector PrevLeftHandForce = FVector::ZeroVector;
+
+	UPROPERTY()
+	FVector PrevLeftHandUpVector = FVector::ZeroVector;
 #pragma endregion
 
 	float LagDistance = 40.f;
 
-	void TraceAttackPosition_Internal(const UWorld* World, const FVector& P0
-									, const FVector& P1, const FVector& P2
-									, const UBoxComponent* AttackBox);
+	void TraceAttackPosition_Internal(FSquareTraceParams& TraceParams
+									, const FVector& P0, const FVector& P1
+									, const FVector& P2, const bool IsLeft);
 
 	void OnTraceAttackHit_Internal();
 

@@ -54,6 +54,7 @@ void UKaurgComboAttackNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp
 
 	if (IsLeftEnabled)
 	{
+		BossKaurgCombatComponent->TraceToAttackLeftHand();
 	}
 
 	if (IsRightEnabled)

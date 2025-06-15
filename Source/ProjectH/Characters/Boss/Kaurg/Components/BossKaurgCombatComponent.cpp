@@ -31,8 +31,13 @@ void UBossKaurgCombatComponent::TraceToAttackLeftHand()
 		PrevLeftLocation, NextLeftLocation) + MidForceVector * FVector::Dist(
 		PrevLeftLocation, NextLeftLocation) / LagDistance;
 
-	TraceAttackPosition_Internal(GetWorld(), PrevLeftLocation, BezierMidPoint
-								, NextLeftLocation, GetLeftHandAttackRegion());
+	FSquareTraceParams TraceParams;
+	TraceParams.World = GetWorld();
+	TraceParams.IsShowDebugTrace = true;
+	TraceParams.SquareExtents = GetLeftHandAttackRegion()->GetScaledBoxExtent();
+
+	TraceAttackPosition_Internal(TraceParams, PrevLeftLocation, BezierMidPoint
+								, NextLeftLocation, true);
 
 	CaptureLeftHandPosition();
 }
@@ -50,9 +55,14 @@ void UBossKaurgCombatComponent::TraceToAttackRightHand()
 		PrevRightLocation, NextRightLocation) + MidForceVector * FVector::Dist(
 		PrevRightLocation, NextRightLocation) / LagDistance;
 
-	TraceAttackPosition_Internal(GetWorld(), PrevRightLocation, BezierMidPoint
-								, NextRightLocation
-								, GetRightHandAttackRegion());
+	FSquareTraceParams TraceParams;
+	TraceParams.World = GetWorld();
+	TraceParams.IsShowDebugTrace = true;
+	TraceParams.SquareExtents = GetRightHandAttackRegion()->
+		GetScaledBoxExtent();
+
+	TraceAttackPosition_Internal(TraceParams, PrevRightLocation, BezierMidPoint
+								, NextRightLocation, false);
 
 	CaptureRightHandPosition();
 }
@@ -62,34 +72,30 @@ void UBossKaurgCombatComponent::CaptureRightHandPosition()
 	SetPrevRightHandPosition(
 		GetRightHandAttackRegion()->GetComponentLocation());
 	SetPrevRightHandForce(GetRightHandAttackRegion()->GetForwardVector());
+	SetPrevRightHandUpVector(GetRightHandAttackRegion()->GetUpVector());
 }
 
 void UBossKaurgCombatComponent::CaptureLeftHandPosition()
 {
 	SetPrevLeftHandPosition(GetLeftHandAttackRegion()->GetComponentLocation());
 	SetPrevLeftHandForce(GetLeftHandAttackRegion()->GetForwardVector());
+	SetPrevLeftHandUpVector(GetLeftHandAttackRegion()->GetUpVector());
 }
 
-void UBossKaurgCombatComponent::TraceAttackPosition_Internal(const UWorld* World
-	, const FVector& P0, const FVector& P1, const FVector& P2
-	, const UBoxComponent* AttackBox)
+void UBossKaurgCombatComponent::TraceAttackPosition_Internal(
+	FSquareTraceParams& TraceParams, const FVector& P0, const FVector& P1
+	, const FVector& P2, const bool IsLeft)
 {
 	const float Distance = FVector::Dist(P0, P2);
 	// 보간 갯수
 	const uint16 InterpCount = FMath::CeilToInt(
 		FMath::Abs(Distance) / LagDistance);
 
-	UKismetSystemLibrary::DrawDebugLine(World, P0, P2, FLinearColor::Red, 1, 1);
+	UKismetSystemLibrary::DrawDebugLine(TraceParams.World, P0, P2
+										, FLinearColor::Red, 1, 1);
 
-	FSquareTraceParams TraceParams;
-	TraceParams.World = World;
-	TraceParams.IgnoreActors = IgnoreActors;
-	TraceParams.HitResults = HitResults;
-
-	TraceParams.IsShowDebugTrace = true;
-	TraceParams.SquareExtents = AttackBox->GetScaledBoxExtent();
-
-	for (int i = 0; i <= InterpCount; i++)
+	// 중간 선만 기준으로 우선 설정한다.
+	for (int i = 1; i < InterpCount; i++)
 	{
 		const float Percent = InterpCount == 0
 								? 1
@@ -99,10 +105,18 @@ void UBossKaurgCombatComponent::TraceAttackPosition_Internal(const UWorld* World
 			P0, P1, P2, Percent);
 
 		TraceParams.SquareInfo.Position = BezierPoint;
-		TraceParams.SquareInfo.ForwardVector = AttackBox->GetForwardVector();
-		TraceParams.SquareInfo.UpVector = AttackBox->GetUpVector();
+		TraceParams.SquareInfo.ForwardVector = FMath::Lerp(
+			IsLeft ? PrevLeftHandForce : PrevRightHandForce
+			, IsLeft
+				? GetLeftHandAttackRegion()->GetForwardVector()
+				: GetRightHandAttackRegion()->GetForwardVector(), Percent);
+		TraceParams.SquareInfo.UpVector = FMath::Lerp(
+			IsLeft ? PrevLeftHandUpVector : PrevRightHandUpVector
+			, IsLeft
+				? GetLeftHandAttackRegion()->GetUpVector()
+				: GetRightHandAttackRegion()->GetUpVector(), Percent);
 
-		FTraceUtil::SquareTraceMulti(TraceParams);
+		FTraceUtil::SquareTraceMulti(TraceParams, IgnoreActors, HitResults);
 		OnTraceAttackHit_Internal();
 	}
 }
@@ -122,7 +136,6 @@ void UBossKaurgCombatComponent::OnTraceAttackHit_Internal()
 		}
 
 		IgnoreActors.Add(HitResult.GetActor());
-
 		// TODO: 피격 관련 Ability 실행하기
 	}
 }

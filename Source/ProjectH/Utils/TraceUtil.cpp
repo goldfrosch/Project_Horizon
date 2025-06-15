@@ -6,11 +6,15 @@ TArray<FVector> FTraceUtil::SquareScalePointArray = {
 	{-1, -1, 0}, {-1, 1, 0}, {1, -1, 0}, {1, 1, 0}, {0, 0, 0}
 };
 
-void FTraceUtil::BoxTraceMulti(FBoxTraceParams& TraceParams)
+void FTraceUtil::BoxTraceMulti(FBoxTraceParams& TraceParams
+								, TArray<AActor*>& IgnoreActors
+								, TArray<FHitResult>& HitResults)
 {
 }
 
-void FTraceUtil::SquareTraceMulti(FSquareTraceParams& TraceParams)
+void FTraceUtil::SquareTraceMulti(FSquareTraceParams& TraceParams
+								, TArray<AActor*>& IgnoreActors
+								, TArray<FHitResult>& HitResults)
 {
 	for (const FVector& ScalePinPoint : SquareScalePointArray)
 	{
@@ -25,12 +29,12 @@ void FTraceUtil::SquareTraceMulti(FSquareTraceParams& TraceParams)
 		}
 	}
 
-	LineTraceBySquareScalePoint(TraceParams, 0, 1);
-	LineTraceBySquareScalePoint(TraceParams, 2, 3);
-	LineTraceBySquareScalePoint(TraceParams, 1, 3);
-	LineTraceBySquareScalePoint(TraceParams, 0, 2);
-	LineTraceBySquareScalePoint(TraceParams, 2, 1);
-	LineTraceBySquareScalePoint(TraceParams, 0, 3);
+	LineTraceBySquareScalePoint(TraceParams, 0, 1, IgnoreActors, HitResults);
+	LineTraceBySquareScalePoint(TraceParams, 2, 3, IgnoreActors, HitResults);
+	LineTraceBySquareScalePoint(TraceParams, 1, 3, IgnoreActors, HitResults);
+	LineTraceBySquareScalePoint(TraceParams, 0, 2, IgnoreActors, HitResults);
+	LineTraceBySquareScalePoint(TraceParams, 2, 1, IgnoreActors, HitResults);
+	LineTraceBySquareScalePoint(TraceParams, 0, 3, IgnoreActors, HitResults);
 }
 
 FVector FTraceUtil::GetSquarePositionValueWithScalePoint(
@@ -47,19 +51,19 @@ FVector FTraceUtil::GetSquarePositionValueWithScalePoint(
 }
 
 void FTraceUtil::LineTraceBySquareScalePoint(FSquareTraceParams& Params
-											, const uint8 P0, const uint8 P1)
+											, const uint8 P0, const uint8 P1
+											, TArray<AActor*>& IgnoreActors
+											, TArray<FHitResult>& HitResults)
 {
 	UKismetSystemLibrary::LineTraceMulti(Params.World
 										, GetSquarePositionValueWithScalePoint(
 											Params, SquareScalePointArray[P0])
 										, GetSquarePositionValueWithScalePoint(
 											Params, SquareScalePointArray[P1])
-										, TraceTypeQuery1, false
-										, Params.IgnoreActors
+										, TraceTypeQuery1, false, IgnoreActors
 										, Params.IsShowDebugTrace
 											? EDrawDebugTrace::ForDuration
-											: EDrawDebugTrace::None
-										, Params.HitResults, true
-										, FLinearColor::Red, FLinearColor::Green
-										, 1);
+											: EDrawDebugTrace::None, HitResults
+										, true, FLinearColor::Red
+										, FLinearColor::Green, 1);
 }

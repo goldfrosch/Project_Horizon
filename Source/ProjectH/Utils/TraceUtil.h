@@ -9,11 +9,9 @@ struct PROJECTH_API FSquareInfoParams
 
 struct PROJECTH_API FTraceParams
 {
-	const UWorld* World;
-	TArray<AActor*> IgnoreActors;
-	TArray<FHitResult> HitResults;
+	const UWorld* World = nullptr;
 
-	bool IsShowDebugTrace;
+	bool IsShowDebugTrace = false;
 };
 
 struct PROJECTH_API FSquareTraceParams : FTraceParams
@@ -29,13 +27,20 @@ struct PROJECTH_API FBoxTraceParams : FTraceParams
 
 	FSquareInfoParams StartSquareInfo;
 	FSquareInfoParams EndSquareInfo;
+
+	// 박스 Trace 시 바닥은 제거할 지
+	bool IsRemovePlane;
 };
 
 class FTraceUtil
 {
 public:
-	static void BoxTraceMulti(FBoxTraceParams& TraceParams);
-	static void SquareTraceMulti(FSquareTraceParams& TraceParams);
+	static void BoxTraceMulti(FBoxTraceParams& TraceParams
+							, TArray<AActor*>& IgnoreActors
+							, TArray<FHitResult>& HitResults);
+	static void SquareTraceMulti(FSquareTraceParams& TraceParams
+								, TArray<AActor*>& IgnoreActors
+								, TArray<FHitResult>& HitResults);
 
 private:
 	static TArray<FVector> SquareScalePointArray;
@@ -44,5 +49,7 @@ private:
 		const FSquareTraceParams& Params, const FVector& Scale);
 
 	static void LineTraceBySquareScalePoint(FSquareTraceParams& Params
-											, const uint8 P0, const uint8 P1);
+											, const uint8 P0, const uint8 P1
+											, TArray<AActor*>& IgnoreActors
+											, TArray<FHitResult>& HitResults);
 };
