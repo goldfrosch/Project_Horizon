@@ -56,14 +56,10 @@ void UKaurgComboAttackNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp
 	{
 		BossKaurgCombatComponent->TraceToAttackLeftHand();
 	}
-
+ 
 	if (IsRightEnabled)
 	{
-		const FVector NextRightLocation = BossKaurgCombatComponent->
-										GetRightHandAttackRegion()->
-										GetComponentLocation();
-
-		BossKaurgCombatComponent->SetPrevLeftHandPosition(NextRightLocation);
+		BossKaurgCombatComponent->TraceToAttackRightHand();
 	}
 }
 
