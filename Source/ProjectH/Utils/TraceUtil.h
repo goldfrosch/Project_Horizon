@@ -52,4 +52,9 @@ private:
 											, const uint8 P0, const uint8 P1
 											, TArray<AActor*>& IgnoreActors
 											, TArray<FHitResult>& HitResults);
+
+	static void LineTraceByBoxBridge(const FSquareTraceParams& StartSquareParams
+									, const FSquareTraceParams& EndSquareParams
+									, TArray<AActor*>& IgnoreActors
+									, TArray<FHitResult>& HitResults);
 };
