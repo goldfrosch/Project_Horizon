@@ -2,9 +2,9 @@
 
 struct PROJECTH_API FSquareInfoParams
 {
-	FVector UpVector;
-	FVector ForwardVector;
-	FVector Position;
+	FVector UpVector = FVector::ZeroVector;
+	FVector ForwardVector = FVector::ZeroVector;
+	FVector Position = FVector::ZeroVector;
 };
 
 struct PROJECTH_API FTraceParams
@@ -16,14 +16,14 @@ struct PROJECTH_API FTraceParams
 
 struct PROJECTH_API FSquareTraceParams : FTraceParams
 {
-	FVector SquareExtents;
+	FVector SquareExtents = FVector::ZeroVector;
 
 	FSquareInfoParams SquareInfo;
 };
 
 struct PROJECTH_API FBoxTraceParams : FTraceParams
 {
-	FVector BoxExtents;
+	FVector BoxExtents = FVector::ZeroVector;
 
 	FSquareInfoParams StartSquareInfo;
 	FSquareInfoParams EndSquareInfo;

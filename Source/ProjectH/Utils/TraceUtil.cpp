@@ -52,10 +52,15 @@ void FTraceUtil::SquareTraceMulti(FSquareTraceParams& TraceParams
 		const FVector PinPoint = GetSquarePositionValueWithScalePoint(
 			TraceParams, ScalePinPoint);
 
+		if (PinPoint == FVector::ZeroVector)
+		{
+			continue;
+		}
+
 		if (TraceParams.IsShowDebugTrace)
 		{
 			UKismetSystemLibrary::DrawDebugSphere(TraceParams.World
-												, PinPoint, 2, 12
+												, PinPoint, 3, 12
 												, FLinearColor::Yellow, 1, 1);
 		}
 	}
@@ -72,6 +77,7 @@ FVector FTraceUtil::GetSquarePositionValueWithScalePoint(
 	const FSquareTraceParams& Params, const FVector& Scale)
 {
 	FVector PinPoint = Params.SquareInfo.Position;
+
 	PinPoint += Params.SquareInfo.ForwardVector * Scale.X * Params.SquareExtents
 		.X;
 	PinPoint += FVector::CrossProduct(Params.SquareInfo.ForwardVector
@@ -104,6 +110,12 @@ void FTraceUtil::LineTraceByBoxBridge(
 	, const FSquareTraceParams& EndSquareParams, TArray<AActor*>& IgnoreActors
 	, TArray<FHitResult>& HitResults)
 {
+	if (StartSquareParams.SquareInfo.Position == EndSquareParams.SquareInfo.
+		Position)
+	{
+		return;
+	}
+
 	UKismetSystemLibrary::LineTraceMulti(StartSquareParams.World
 										, GetSquarePositionValueWithScalePoint(
 											StartSquareParams
@@ -117,6 +129,7 @@ void FTraceUtil::LineTraceByBoxBridge(
 											: EDrawDebugTrace::None, HitResults
 										, true, FLinearColor::Red
 										, FLinearColor::Green, 1);
+
 	UKismetSystemLibrary::LineTraceMulti(StartSquareParams.World
 										, GetSquarePositionValueWithScalePoint(
 											StartSquareParams
@@ -130,6 +143,7 @@ void FTraceUtil::LineTraceByBoxBridge(
 											: EDrawDebugTrace::None, HitResults
 										, true, FLinearColor::Red
 										, FLinearColor::Green, 1);
+
 	UKismetSystemLibrary::LineTraceMulti(StartSquareParams.World
 										, GetSquarePositionValueWithScalePoint(
 											StartSquareParams
@@ -143,6 +157,7 @@ void FTraceUtil::LineTraceByBoxBridge(
 											: EDrawDebugTrace::None, HitResults
 										, true, FLinearColor::Red
 										, FLinearColor::Green, 1);
+
 	UKismetSystemLibrary::LineTraceMulti(StartSquareParams.World
 										, GetSquarePositionValueWithScalePoint(
 											StartSquareParams
@@ -156,6 +171,7 @@ void FTraceUtil::LineTraceByBoxBridge(
 											: EDrawDebugTrace::None, HitResults
 										, true, FLinearColor::Red
 										, FLinearColor::Green, 1);
+
 	UKismetSystemLibrary::LineTraceMulti(StartSquareParams.World
 										, GetSquarePositionValueWithScalePoint(
 											StartSquareParams
@@ -169,6 +185,7 @@ void FTraceUtil::LineTraceByBoxBridge(
 											: EDrawDebugTrace::None, HitResults
 										, true, FLinearColor::Red
 										, FLinearColor::Green, 1);
+
 	UKismetSystemLibrary::LineTraceMulti(StartSquareParams.World
 										, GetSquarePositionValueWithScalePoint(
 											StartSquareParams
