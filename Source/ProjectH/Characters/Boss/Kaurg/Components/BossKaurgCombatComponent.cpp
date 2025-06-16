@@ -119,6 +119,44 @@ void UBossKaurgCombatComponent::TraceAttackPosition_Internal(
 		FTraceUtil::SquareTraceMulti(TraceParams, IgnoreActors, HitResults);
 		OnTraceAttackHit_Internal();
 	}
+
+	FBoxTraceParams BoxTraceParams;
+	BoxTraceParams.World = TraceParams.World;
+	BoxTraceParams.IsShowDebugTrace = TraceParams.IsShowDebugTrace;
+	BoxTraceParams.BoxExtents = IsLeft
+									? GetLeftHandAttackRegion()->
+									GetScaledBoxExtent()
+									: GetRightHandAttackRegion()->
+									GetScaledBoxExtent();
+
+	BoxTraceParams.StartSquareInfo.Position = IsLeft
+												? GetPrevLeftHandPosition()
+												: GetPrevRightHandPosition();
+	BoxTraceParams.StartSquareInfo.ForwardVector = IsLeft
+														? GetPrevLeftHandForce()
+														: GetPrevRightHandForce();
+	BoxTraceParams.StartSquareInfo.UpVector = IsLeft
+												? GetPrevLeftHandUpVector()
+												: GetPrevRightHandUpVector();
+
+
+	BoxTraceParams.EndSquareInfo.Position = IsLeft
+												? GetLeftHandAttackRegion()->
+												GetComponentLocation()
+												: GetRightHandAttackRegion()->
+												GetComponentLocation();
+	BoxTraceParams.EndSquareInfo.ForwardVector = IsLeft
+													? GetLeftHandAttackRegion()
+													->GetForwardVector()
+													: GetRightHandAttackRegion()
+													->GetForwardVector();
+	BoxTraceParams.EndSquareInfo.UpVector = IsLeft
+												? GetLeftHandAttackRegion()->
+												GetUpVector()
+												: GetRightHandAttackRegion()->
+												GetUpVector();
+
+	FTraceUtil::BoxTraceMulti(BoxTraceParams, IgnoreActors, HitResults);
 }
 
 void UBossKaurgCombatComponent::OnTraceAttackHit_Internal()

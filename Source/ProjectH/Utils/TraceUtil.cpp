@@ -10,6 +10,113 @@ void FTraceUtil::BoxTraceMulti(FBoxTraceParams& TraceParams
 								, TArray<AActor*>& IgnoreActors
 								, TArray<FHitResult>& HitResults)
 {
+	FSquareTraceParams SquareTraceParams;
+	SquareTraceParams.World = TraceParams.World;
+	SquareTraceParams.IsShowDebugTrace = TraceParams.IsShowDebugTrace;
+	SquareTraceParams.SquareExtents = TraceParams.BoxExtents;
+
+	FSquareTraceParams StartSquareTraceParams = SquareTraceParams;
+	FSquareTraceParams EndSquareTraceParams = SquareTraceParams;
+
+	StartSquareTraceParams.SquareInfo.Position = TraceParams.StartSquareInfo.
+		Position;
+	StartSquareTraceParams.SquareInfo.ForwardVector = TraceParams.
+		StartSquareInfo.ForwardVector;
+	StartSquareTraceParams.SquareInfo.UpVector = TraceParams.StartSquareInfo.
+		UpVector;
+
+	EndSquareTraceParams.SquareInfo.Position = TraceParams.EndSquareInfo.
+		Position;
+	EndSquareTraceParams.SquareInfo.ForwardVector = TraceParams.EndSquareInfo.
+		ForwardVector;
+	EndSquareTraceParams.SquareInfo.UpVector = TraceParams.EndSquareInfo.
+		UpVector;
+
+	SquareTraceMulti(StartSquareTraceParams, IgnoreActors, HitResults);
+
+	UKismetSystemLibrary::LineTraceMulti(TraceParams.World
+										, GetSquarePositionValueWithScalePoint(
+											StartSquareTraceParams
+											, SquareScalePointArray[0])
+										, GetSquarePositionValueWithScalePoint(
+											EndSquareTraceParams
+											, SquareScalePointArray[0])
+										, TraceTypeQuery1, false, IgnoreActors
+										, TraceParams.IsShowDebugTrace
+											? EDrawDebugTrace::ForDuration
+											: EDrawDebugTrace::None, HitResults
+										, true, FLinearColor::Red
+										, FLinearColor::Green, 1);
+	UKismetSystemLibrary::LineTraceMulti(TraceParams.World
+										, GetSquarePositionValueWithScalePoint(
+											StartSquareTraceParams
+											, SquareScalePointArray[1])
+										, GetSquarePositionValueWithScalePoint(
+											EndSquareTraceParams
+											, SquareScalePointArray[1])
+										, TraceTypeQuery1, false, IgnoreActors
+										, TraceParams.IsShowDebugTrace
+											? EDrawDebugTrace::ForDuration
+											: EDrawDebugTrace::None, HitResults
+										, true, FLinearColor::Red
+										, FLinearColor::Green, 1);
+	UKismetSystemLibrary::LineTraceMulti(TraceParams.World
+										, GetSquarePositionValueWithScalePoint(
+											StartSquareTraceParams
+											, SquareScalePointArray[2])
+										, GetSquarePositionValueWithScalePoint(
+											EndSquareTraceParams
+											, SquareScalePointArray[2])
+										, TraceTypeQuery1, false, IgnoreActors
+										, TraceParams.IsShowDebugTrace
+											? EDrawDebugTrace::ForDuration
+											: EDrawDebugTrace::None, HitResults
+										, true, FLinearColor::Red
+										, FLinearColor::Green, 1);
+	UKismetSystemLibrary::LineTraceMulti(TraceParams.World
+										, GetSquarePositionValueWithScalePoint(
+											StartSquareTraceParams
+											, SquareScalePointArray[3])
+										, GetSquarePositionValueWithScalePoint(
+											EndSquareTraceParams
+											, SquareScalePointArray[3])
+										, TraceTypeQuery1, false, IgnoreActors
+										, TraceParams.IsShowDebugTrace
+											? EDrawDebugTrace::ForDuration
+											: EDrawDebugTrace::None, HitResults
+										, true, FLinearColor::Red
+										, FLinearColor::Green, 1);
+	UKismetSystemLibrary::LineTraceMulti(TraceParams.World
+										, GetSquarePositionValueWithScalePoint(
+											StartSquareTraceParams
+											, SquareScalePointArray[0])
+										, GetSquarePositionValueWithScalePoint(
+											EndSquareTraceParams
+											, SquareScalePointArray[2])
+										, TraceTypeQuery1, false, IgnoreActors
+										, TraceParams.IsShowDebugTrace
+											? EDrawDebugTrace::ForDuration
+											: EDrawDebugTrace::None, HitResults
+										, true, FLinearColor::Red
+										, FLinearColor::Green, 1);
+	UKismetSystemLibrary::LineTraceMulti(TraceParams.World
+										, GetSquarePositionValueWithScalePoint(
+											StartSquareTraceParams
+											, SquareScalePointArray[1])
+										, GetSquarePositionValueWithScalePoint(
+											EndSquareTraceParams
+											, SquareScalePointArray[3])
+										, TraceTypeQuery1, false, IgnoreActors
+										, TraceParams.IsShowDebugTrace
+											? EDrawDebugTrace::ForDuration
+											: EDrawDebugTrace::None, HitResults
+										, true, FLinearColor::Red
+										, FLinearColor::Green, 1);
+
+	if (!TraceParams.IsRemovePlane)
+	{
+		SquareTraceMulti(SquareTraceParams, IgnoreActors, HitResults);
+	}
 }
 
 void FTraceUtil::SquareTraceMulti(FSquareTraceParams& TraceParams
