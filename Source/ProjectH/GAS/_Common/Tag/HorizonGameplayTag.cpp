@@ -77,6 +77,9 @@ namespace HorizonGameplayTags
 	}
 
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Test_Tag, "Test.Tag", "테스트용 노출 태그");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Passive_Died, "Passive.Died", "사망 시 시전되는 스킬")
-	;
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Default_Passive_Died, "Default.Passive.Died"
+									, "사망 시 시전되는 스킬");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Boss_Active_Initialize
+									, "Boss.Active.Initialize"
+									, "보스가 처음 스폰 후 시전하는 스킬");
 }

@@ -14,10 +14,11 @@ ABossKaurg::ABossKaurg()
 	Attribute = CreateDefaultSubobject<UATR_BaseAttribute>(TEXT("Attribute"));
 
 	CollisionBox = CreateDefaultSubobject<UBoxComponent>("Box Collision");
-	CollisionBox->SetBoxExtent({136, 240, 180});
-	CollisionBox->SetupAttachment(GetRootComponent());
+	CollisionBox->SetBoxExtent({240, 136, 180});
+	SetRootComponent(CollisionBox);
 
 	GetMesh()->SetRelativeLocation({0, -28, -180});
+	GetMesh()->SetRelativeRotation({0, -90, 0});
 	GetMesh()->SetupAttachment(CollisionBox);
 
 	BossKaurgCombatComponent = CreateDefaultSubobject<

@@ -6,9 +6,11 @@
 
 #include "BasePawn.generated.h"
 
+class URotatingMovementComponent;
 class UHorizonAbilitySystemInitializeData;
 class UHorizonAbilitySystemComponent;
 class UATR_BaseAttribute;
+class UFloatingPawnMovement;
 struct FOnAttributeChangeData;
 
 UCLASS()
@@ -22,6 +24,8 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	GETTER_EDITABLE(TObjectPtr<USkeletalMeshComponent>, Mesh)
+	GETTER_EDITABLE(TObjectPtr<UFloatingPawnMovement>, FloatingPawnMovement)
+	GETTER(bool, IsInAir)
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Options|GAS")
@@ -32,13 +36,28 @@ protected:
 
 	virtual void InitializeAbilitySystem();
 
+	virtual void Tick(float DeltaSeconds) override;
+
 	void OnHealthChanged(const FOnAttributeChangeData& Data);
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Options|GAS"
-		, meta = (AllowPrivateAccess = true))
-	TObjectPtr<UHorizonAbilitySystemInitializeData> AbilitySystemInitializeData;
-
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<USkeletalMeshComponent> Mesh;
+
+#pragma region Movement
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	TObjectPtr<UFloatingPawnMovement> FloatingPawnMovement;
+
+	FVector GravityVelocity;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Movement"
+		, meta = (AllowPrivateAccess = true))
+	float Gravity = 980.f;
+
+	UPROPERTY(VisibleInstanceOnly, Category = "Options|Movement"
+		, meta = (AllowPrivateAccess = true))
+	uint8 IsInAir : 1 = false;
+
+	void PerformGravity_Internal(const float DeltaSeconds);
+#pragma endregion
 };

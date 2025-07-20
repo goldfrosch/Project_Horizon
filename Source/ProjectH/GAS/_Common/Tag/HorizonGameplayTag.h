@@ -38,5 +38,6 @@ namespace HorizonGameplayTags
 										, const bool IsReplicated = false);
 
 	PROJECTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Test_Tag)
-	PROJECTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Passive_Died)
+	PROJECTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Default_Passive_Died)
+	PROJECTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Boss_Active_Initialize)
 }

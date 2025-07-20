@@ -1,26 +1,18 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "Runtime/AIModule/Classes/AIController.h"
+#include "ProjectH/Ai/Controller/BaseEnemyAIController.h"
 #include "BossKaurgController.generated.h"
 
 UCLASS()
-class PROJECTH_API ABossKaurgController : public AAIController
+class PROJECTH_API ABossKaurgController : public ABaseEnemyAIController
 {
 	GENERATED_BODY()
 
 public:
-	ABossKaurgController();
+	ABossKaurgController(const FObjectInitializer& ObjectInitializer);
 
 protected:
-	virtual void BeginPlay() override;
-
+	virtual void OnPossess(APawn* InPawn) override;
 	virtual void Tick(float DeltaTime) override;
-
-private:
-	UPROPERTY(EditDefaultsOnly, Category = "Options"
-		, meta = (AllowPrivateAccess = true))
-	TObjectPtr<UBehaviorTree> BehaviorTree;
 };

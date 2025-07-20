@@ -8,10 +8,9 @@ UHorizonAbilitySystemComponent::UHorizonAbilitySystemComponent()
 	SetIsReplicatedByDefault(true);
 }
 
-void UHorizonAbilitySystemComponent::Initialize(
-	UHorizonAbilitySystemInitializeData* InitialData)
+void UHorizonAbilitySystemComponent::Initialize()
 {
-	if (!InitialData)
+	if (!AbilitySystemInitializeData)
 	{
 		return;
 	}
@@ -26,21 +25,23 @@ void UHorizonAbilitySystemComponent::Initialize(
 	{
 		return;
 	}
-	
-	if (!InitialData->GetDefaultGameplayAbilities().IsEmpty())
+
+	if (!AbilitySystemInitializeData->GetDefaultGameplayAbilities().IsEmpty())
 	{
-		for (const TSubclassOf<UGA_BaseAbility> Ability : InitialData->GetDefaultGameplayAbilities())
+		for (const TSubclassOf<UGA_BaseAbility> Ability :
+			AbilitySystemInitializeData->GetDefaultGameplayAbilities())
 		{
-			UGA_BaseAbility* BaseAbility = Ability->
-				GetDefaultObject<UGA_BaseAbility>();
+			UGA_BaseAbility* BaseAbility = Ability->GetDefaultObject<
+				UGA_BaseAbility>();
 
 			BaseAbility->InitializeAbility(this);
 		}
 	}
-	
-	if (!InitialData->GetDefaultGameplayTags().IsEmpty())
+
+	if (!AbilitySystemInitializeData->GetDefaultGameplayTags().IsEmpty())
 	{
-		AddLooseGameplayTags(InitialData->GetDefaultGameplayTags());
+		AddLooseGameplayTags(
+			AbilitySystemInitializeData->GetDefaultGameplayTags());
 	}
 
 	SetIsInitialize(true);

@@ -4,5 +4,10 @@ void ABasePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ConsoleCommand("showdebug AbilitySystem");
+	TeamId = FGenericTeamId(0);
+}
+
+FGenericTeamId ABasePlayerController::GetGenericTeamId() const
+{
+	return TeamId;
 }

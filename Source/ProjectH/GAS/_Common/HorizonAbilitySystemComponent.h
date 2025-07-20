@@ -5,18 +5,25 @@
 #include "ProjectH/Utils/MacroUtil.h"
 #include "HorizonAbilitySystemComponent.generated.h"
 
+class UHorizonAbilitySystemInitializeData;
+
 UCLASS()
-class PROJECTH_API UHorizonAbilitySystemComponent : public UAbilitySystemComponent
+class PROJECTH_API UHorizonAbilitySystemComponent
+	: public UAbilitySystemComponent
 {
 	GENERATED_BODY()
-	
+
 public:
 	UHorizonAbilitySystemComponent();
 
-	void Initialize(class UHorizonAbilitySystemInitializeData* InitialData);
+	void Initialize();
 
 	GETTER_SETTER(bool, IsInitialize)
 
 private:
 	bool IsInitialize = false;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Options"
+		, meta = (AllowPrivateAccess = true))
+	TObjectPtr<UHorizonAbilitySystemInitializeData> AbilitySystemInitializeData;
 };

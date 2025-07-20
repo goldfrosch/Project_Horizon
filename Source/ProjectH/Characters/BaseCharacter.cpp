@@ -17,7 +17,7 @@ UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 
 void ABaseCharacter::InitializeAbilitySystem()
 {
-	AbilitySystemComponent->Initialize(AbilitySystemInitializeData);
+	AbilitySystemComponent->Initialize();
 	AbilitySystemComponent->
 		GetGameplayAttributeValueChangeDelegate(
 			Attribute->GetMoveSpeedAttribute()).AddUObject(
@@ -36,7 +36,7 @@ void ABaseCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
 	if (Attribute->GetHealth() == 0)
 	{
 		FGameplayTagContainer TagContainer;
-		TagContainer.AddTag(HorizonGameplayTags::Passive_Died);
+		TagContainer.AddTag(HorizonGameplayTags::Default_Passive_Died);
 
 		AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer);
 	}

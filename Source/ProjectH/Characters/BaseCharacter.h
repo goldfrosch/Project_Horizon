@@ -35,9 +35,4 @@ protected:
 	void OnHealthChanged(const FOnAttributeChangeData& Data);
 
 	void OnMovementSpeedChanged(const FOnAttributeChangeData& Data);
-
-private:
-	UPROPERTY(EditDefaultsOnly, Category = "Options|GAS"
-		, meta = (AllowPrivateAccess = true))
-	TObjectPtr<UHorizonAbilitySystemInitializeData> AbilitySystemInitializeData;
 };

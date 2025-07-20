@@ -4,6 +4,7 @@
 #include "ProjectH/Characters/BasePawn.h"
 #include "BossKaurg.generated.h"
 
+class UFloatingPawnMovement;
 class UBossKaurgCombatComponent;
 class UBoxComponent;
 
