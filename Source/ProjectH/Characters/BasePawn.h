@@ -46,9 +46,12 @@ private:
 
 #pragma region Movement
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	TObjectPtr<USceneComponent> FootPos;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UFloatingPawnMovement> FloatingPawnMovement;
 
-	FVector GravityVelocity;
+	FVector GravityVelocity = {0, 0, 0};
 
 	UPROPERTY(EditDefaultsOnly, Category = "Options|Movement"
 		, meta = (AllowPrivateAccess = true))

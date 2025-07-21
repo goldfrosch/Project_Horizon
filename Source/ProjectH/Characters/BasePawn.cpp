@@ -12,6 +12,8 @@ ABasePawn::ABasePawn()
 
 	FloatingPawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(
 		"Floating Movement Component");
+	FootPos = CreateDefaultSubobject<USceneComponent>("Foot Pos");
+	FootPos->SetupAttachment(GetRootComponent());
 
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -58,23 +60,19 @@ void ABasePawn::PerformGravity_Internal(const float DeltaSeconds)
 
 	FHitResult HitResult;
 
-	const FVector DeltaMoveTo = GravityVelocity * 2;
+	const FVector LineTraceStartLocation = GetActorLocation() + FootPos->
+		GetComponentLocation();
 
-	const float HalfHeight = Mesh->Bounds.BoxExtent.Z;
-	const FVector SkeletalMeshBottom = GetActorLocation() - Mesh->GetUpVector()
-		* HalfHeight;
-
-	const FVector LineTraceStartLocation = GetActorLocation();
-	const FVector LineTraceEndLocation = SkeletalMeshBottom + DeltaMoveTo;
-
+	// 겹친 블럭이 있는 경우는 공중에 있지 않다고 처리한다.
 	UKismetSystemLibrary::LineTraceSingle(GetWorld(), LineTraceStartLocation
-										, LineTraceEndLocation, TraceTypeQuery1
-										, true, TArray<AActor*>()
+										, LineTraceStartLocation +
+										GravityVelocity, TraceTypeQuery1, true
+										, TArray<AActor*>()
 										, EDrawDebugTrace::ForOneFrame
 										, HitResult, true);
 
-	// 겹친 블럭이 있는 경우는 공중에 있지 않다고 처리한다.
 	IsInAir = !HitResult.IsValidBlockingHit();
+	AddActorWorldOffset(GravityVelocity, true);
 
 	if (!IsInAir)
 	{
