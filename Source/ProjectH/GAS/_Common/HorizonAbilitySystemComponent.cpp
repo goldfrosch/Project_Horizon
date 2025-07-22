@@ -38,6 +38,16 @@ void UHorizonAbilitySystemComponent::Initialize()
 		}
 	}
 
+	if (!AbilitySystemInitializeData->GetDefaultGameplayEffects().IsEmpty())
+	{
+		for (const TSubclassOf<UGameplayEffect> Effect :
+			AbilitySystemInitializeData->GetDefaultGameplayEffects())
+		{
+			ApplyGameplayEffectToSelf(Effect.GetDefaultObject(), Level
+									, MakeEffectContext());
+		}
+	}
+
 	if (!AbilitySystemInitializeData->GetDefaultGameplayTags().IsEmpty())
 	{
 		AddLooseGameplayTags(

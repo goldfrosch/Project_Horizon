@@ -19,8 +19,13 @@ public:
 	void Initialize();
 
 	GETTER_SETTER(bool, IsInitialize)
+	GETTER(uint16, Level)
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Options"
+		, meta = (AllowPrivateAccess = true))
+	uint16 Level = 1;
+
 	bool IsInitialize = false;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Options"
