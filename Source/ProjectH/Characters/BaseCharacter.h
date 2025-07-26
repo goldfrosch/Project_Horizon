@@ -10,6 +10,7 @@ class UATR_BaseAttribute;
 struct FOnAttributeChangeData;
 class UHorizonAbilitySystemInitializeData;
 class UHorizonAbilitySystemComponent;
+class UMotionWarpingComponent;
 class UInputComponent;
 
 UCLASS()
@@ -35,4 +36,8 @@ protected:
 	void OnHealthChanged(const FOnAttributeChangeData& Data);
 
 	void OnMovementSpeedChanged(const FOnAttributeChangeData& Data);
+
+private:
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<UMotionWarpingComponent> MotionWarpingComponent;
 };

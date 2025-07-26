@@ -36,9 +36,6 @@ bool UBTD_EntityHealthPercentInfo::CalculateRawConditionValue(
 	const UATR_BaseAttribute* AttributeSet = Cast<UATR_BaseAttribute>(
 		ASC->GetAttributeSet(UATR_BaseAttribute::StaticClass()));
 
-	UE_LOG(LogTemp, Display, TEXT("테스트: %f / %f"), AttributeSet->GetHealth()
-			, AttributeSet->GetMaxHealth());
-
 	const float RemainHealthPercent = AttributeSet->GetHealth() / AttributeSet->
 		GetMaxHealth();
 	const float ComparePercent = Percent / 100;

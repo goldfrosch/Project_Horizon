@@ -82,4 +82,7 @@ namespace HorizonGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Boss_Active_Initialize
 									, "Boss.Active.Initialize"
 									, "보스가 처음 스폰 후 시전하는 스킬");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Boss_Kaurg_Active_LeapingCrush
+									, "Boss.Kaurg.Active.LeapingCrush"
+									, "Kaurg Phase.1 Skill1 - Leaping Crush");
 }

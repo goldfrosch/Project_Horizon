@@ -1,6 +1,7 @@
 ﻿#include "BaseCharacter.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
+#include "MotionWarpingComponent.h"
 #include "ProjectH/GAS/_Common/HorizonAbilitySystemComponent.h"
 #include "ProjectH/GAS/_Common/Attribute/ATR_BaseAttribute.h"
 #include "ProjectH/GAS/_Common/Tag/HorizonGameplayTag.h"
@@ -8,12 +9,15 @@
 
 ABaseCharacter::ABaseCharacter()
 {
+	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(
+		"Motion Warping Component");
 }
 
 UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
+
 
 void ABaseCharacter::InitializeAbilitySystem()
 {
