@@ -72,7 +72,7 @@ void UGA_LeapingCrush::InitializeMotionWarpingPoint_Internal(
 	// 보스룸의 천장이 없다는 가정하에 설정 (있어도 딱히 상관없다)
 	// 있는 경우는 AbilityTask로 이후 설정 필요
 	// TODO: 보스의 경우 점프력이라는 별도 스텟을 가지면 좋아보임
-	MiddlePoint.Z += 300;
+	MiddlePoint.Z += 1500;
 	const FVector BezierPoint = FMathUtil::GetBezierPoint(
 		StartTransform.GetLocation(), MiddlePoint, TargetTransform.GetLocation()
 		, 0.5);
