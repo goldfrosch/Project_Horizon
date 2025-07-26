@@ -61,7 +61,8 @@ void UGA_LeapingCrush::InitializeMotionWarpingPoint_Internal(
 
 	const FRotator TargetRotatorToView = {
 		TargetTransform.GetRotation().Rotator().Pitch
-		, TargetTransform.GetRotation().Rotator().Yaw * -1
+		, FMath::UnwindDegrees(
+			TargetTransform.GetRotation().Rotator().Yaw + 180.f)
 		, TargetTransform.GetRotation().Rotator().Roll
 	};
 

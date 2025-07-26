@@ -74,19 +74,17 @@ void UPawnMotionWarpingComponent::UpdateBlendMotion(const float DeltaTime)
 		MotionWarpingData[CurrentMotionWarpingName].CurrentDuration / AlphaBlend
 		.GetBlendTime());
 
-	UE_LOG(LogTemp, Display, TEXT("테스트: %f / %f")
-			, MotionWarpingData[CurrentMotionWarpingName].CurrentDuration
-			, AlphaBlend .GetBlendTime());
+	const FVector LocationResult = FMath::Lerp(
+		GetOwner()->GetTransform().GetLocation()
+		, MotionWarpingData[CurrentMotionWarpingName].Transform.GetLocation()
+		, AlphaBlend.GetAlpha());
 
-	FTransform UpdatedBlend;
-	UpdatedBlend.Blend(GetOwner()->GetTransform()
-						, MotionWarpingData[CurrentMotionWarpingName].Transform
-						, AlphaBlend.GetAlpha());
+	const FQuat RotationResult = FQuat::Slerp(
+		GetOwner()->GetTransform().GetRotation()
+		, MotionWarpingData[CurrentMotionWarpingName].Transform.GetRotation()
+		, AlphaBlend.GetAlpha());
 
-	UpdatedBlend.SetLocation(
-		UpdatedBlend.GetLocation() - GetOwner()->GetActorLocation());
-
-	GetOwner()->AddActorWorldOffset(UpdatedBlend.GetLocation(), true);
-	GetOwner()->SetActorRotation(UpdatedBlend.GetRotation().Rotator());
-	GetOwner()->SetActorScale3D(UpdatedBlend.GetScale3D());
+	GetOwner()->AddActorWorldOffset(
+		LocationResult - GetOwner()->GetActorLocation(), true);
+	GetOwner()->SetActorRotation(RotationResult.Rotator());
 }
