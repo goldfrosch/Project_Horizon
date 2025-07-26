@@ -18,7 +18,7 @@ public class ProjectH : ModuleRules
 			"OnlineSubsystemSteam", "OnlineSubsystemUtils",
 			"UMG", "Slate", "SlateCore", "MovieScene",
 			"LevelSequence", "MovieSceneTracks", "CableComponent", "Niagara",
-			"AIModule"
+			"AIModule", "MotionWarping", "PawnMotionWarping"
 		});
 	}
 }

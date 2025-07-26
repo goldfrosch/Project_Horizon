@@ -1,10 +1,11 @@
 ﻿#include "BasePawn.h"
+
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "PawnMotionWarpingComponent.h"
 #include "ProjectH/GAS/_Common/HorizonAbilitySystemComponent.h"
 #include "ProjectH/GAS/_Common/Attribute/ATR_BaseAttribute.h"
 #include "ProjectH/GAS/_Common/Tag/HorizonGameplayTag.h"
-
 
 ABasePawn::ABasePawn()
 {
@@ -14,6 +15,9 @@ ABasePawn::ABasePawn()
 		"Floating Movement Component");
 	FootPos = CreateDefaultSubobject<USceneComponent>("Foot Pos");
 	FootPos->SetupAttachment(GetRootComponent());
+
+	PawnMotionWarpingComponent = CreateDefaultSubobject<
+		UPawnMotionWarpingComponent>("Pawn Motion Warping Component");
 
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -28,6 +32,7 @@ void ABasePawn::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	PerformGravity_Internal(DeltaSeconds);
+	PerformRootMotionAnimation_Internal();
 }
 
 void ABasePawn::InitializeAbilitySystem()
@@ -55,6 +60,11 @@ void ABasePawn::OnHealthChanged(const FOnAttributeChangeData& Data)
 
 void ABasePawn::PerformGravity_Internal(const float DeltaSeconds)
 {
+	if (GetPawnMotionWarpingComponent()->IsMotionWarping())
+	{
+		return;
+	}
+
 	// 기본적으로 중력 값이 커질 수록 내려간다.
 	GravityVelocity.Z += Gravity * -1 * DeltaSeconds;
 
@@ -78,4 +88,27 @@ void ABasePawn::PerformGravity_Internal(const float DeltaSeconds)
 	{
 		GravityVelocity.Z = 0.f;
 	}
+}
+
+void ABasePawn::PerformRootMotionAnimation_Internal()
+{
+	// TODO: 이런 로직은 조만간 별도의 MovementComponent에 내장시킬 것
+	if (!GetPawnMotionWarpingComponent()->IsMotionWarping())
+	{
+		return;
+	}
+
+	if (!GetMesh()->IsPlayingRootMotion())
+	{
+		return;
+	}
+
+	const FRootMotionMovementParams& RootMotion = GetMesh()->
+		ConsumeRootMotion();
+	if (!RootMotion.bHasRootMotion)
+	{
+		return;
+	}
+
+	AddActorWorldTransform(RootMotion.GetRootMotionTransform());
 }

@@ -6,11 +6,13 @@
 
 #include "BasePawn.generated.h"
 
+class UPawnMotionWarpingComponent;
 class URotatingMovementComponent;
 class UHorizonAbilitySystemInitializeData;
 class UHorizonAbilitySystemComponent;
 class UATR_BaseAttribute;
 class UFloatingPawnMovement;
+
 struct FOnAttributeChangeData;
 
 UCLASS()
@@ -25,6 +27,8 @@ public:
 
 	GETTER_EDITABLE(TObjectPtr<USkeletalMeshComponent>, Mesh)
 	GETTER_EDITABLE(TObjectPtr<UFloatingPawnMovement>, FloatingPawnMovement)
+	GETTER_EDITABLE(TObjectPtr<UPawnMotionWarpingComponent>
+					, PawnMotionWarpingComponent)
 	GETTER(bool, IsInAir)
 
 protected:
@@ -51,6 +55,9 @@ private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UFloatingPawnMovement> FloatingPawnMovement;
 
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	TObjectPtr<UPawnMotionWarpingComponent> PawnMotionWarpingComponent;
+
 	FVector GravityVelocity = {0, 0, 0};
 
 	UPROPERTY(EditDefaultsOnly, Category = "Options|Movement"
@@ -62,5 +69,7 @@ private:
 	uint8 IsInAir : 1 = false;
 
 	void PerformGravity_Internal(const float DeltaSeconds);
+
+	void PerformRootMotionAnimation_Internal();
 #pragma endregion
 };
