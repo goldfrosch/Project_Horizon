@@ -41,4 +41,8 @@ namespace HorizonGameplayTags
 	PROJECTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Default_Passive_Died)
 	PROJECTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Boss_Active_Initialize)
 	PROJECTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Boss_Kaurg_Active_LeapingCrush)
+	PROJECTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(
+		Boss_Kaurg_Active_LeapingCrush_Main)
+	PROJECTH_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(
+		Boss_Kaurg_Active_LeapingCrush_Quake)
 }

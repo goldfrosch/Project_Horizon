@@ -30,6 +30,7 @@ public:
 	GETTER_EDITABLE(TObjectPtr<UPawnMotionWarpingComponent>
 					, PawnMotionWarpingComponent)
 	GETTER(bool, IsInAir)
+	GETTER(TObjectPtr<USceneComponent>, FootPos)
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Options|GAS")
