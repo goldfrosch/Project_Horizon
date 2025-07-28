@@ -17,6 +17,7 @@ public:
 	ABossKaurg();
 
 	GETTER(TObjectPtr<UBossKaurgCombatComponent>, BossKaurgCombatComponent)
+	GETTER(TObjectPtr<UBoxComponent>, CollisionBox)
 
 protected:
 	virtual void BeginPlay() override;
